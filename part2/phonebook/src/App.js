@@ -23,12 +23,19 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
+
     const personObj = {
-      name: newName
+        name: newName
     }
 
-    setPersons(persons.concat(personObj));
-    setNewName('');
+    const found = persons.find(person => person.name === newName);
+
+    if (found !== undefined) {
+      alert(`${newName} is already added to phonebook`);
+    } else {
+      setPersons(persons.concat(personObj));
+      setNewName('');
+    }
   }
 
   return (
