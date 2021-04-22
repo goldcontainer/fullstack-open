@@ -5,7 +5,7 @@ const Person = (props) => {
 	console.log(props)
 
 	return (
-		<li>{props.name}</li>
+		<li>{props.name} {props.number}</li>
 	)
 }
 
