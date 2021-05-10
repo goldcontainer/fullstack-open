@@ -49,6 +49,12 @@ const App = () => {
         number: newNumber,
     };
 
+    axios
+      .post('http://localhost:3001/persons', personObj)
+      .then(response => {
+        console.log(response)
+      })
+
     const found = persons.find(person => person.name === newName);
 
     if (found !== undefined) {
