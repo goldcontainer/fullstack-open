@@ -82,9 +82,11 @@ const App = () => {
         </div>
       </form>
       <Header text='Numbers' />
+      <div>
       {filterList.map(person =>
-        <Person key={person.id} name={person.name} number={person.number} />
+        <Person id={person.id} name={person.name} number={person.number} />
       )}
+      </div>
     </div>
   )
 }

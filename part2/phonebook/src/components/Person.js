@@ -1,11 +1,23 @@
 import React from 'react'
 
+import personService from '../services/persons'
+
 const Person = (props) => {
 
 	console.log(props)
 
+	const handleClick = (event) => {
+
+		if(window.confirm(`Delete ${props.name}?`)) {
+			personService
+				.deletePerson(props.id)
+		}
+	}
+
 	return (
-		<li>{props.name} {props.number}</li>
+		<li key={props.id}>
+			{props.name} {props.number} <button onClick={handleClick}>delete</button>
+		</li>
 	)
 }
 
