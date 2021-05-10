@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Person from './components/Person'
-import axios from 'axios'
+
+import personService from './services/persons'
 
 const Header = (props) => <h2>{props.text}</h2>
 
@@ -15,10 +16,9 @@ const App = () => {
   const [ filter, setNewFilter ] = useState('');
 
   useEffect(() => {
-    console.log('effect');
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response =>  {
+    personService
+      .getAll()
+      .then(response => {
         setPersons(response.data)
       })
   }, [])
@@ -27,17 +27,17 @@ const App = () => {
   const filterList = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setNewFilter(event.target.value);
   }
 
   const handleNameChange = (event) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setNewName(event.target.value);
   }
 
   const handleNumberChange = (event) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setNewNumber(event.target.value);
   }
 
@@ -49,10 +49,12 @@ const App = () => {
         number: newNumber,
     };
 
-    axios
-      .post('http://localhost:3001/persons', personObj)
+    personService
+      .create(personObj)
       .then(response => {
-        console.log(response)
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
       })
 
     const found = persons.find(person => person.name === newName);
