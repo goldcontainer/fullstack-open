@@ -59,19 +59,28 @@ const App = () => {
         number: newNumber,
     };
 
-    personService
-      .create(personObj)
-      .then(response => {
-        setPersons(persons.concat(response.data))
-        setNewName('')
-        setNewNumber('')
-      })
-
     const found = persons.find(person => person.name === newName);
 
     if (found !== undefined) {
-      alert(`${newName} is already added to phonebook`);
+      if(window.confirm(`${newName} is already added too phonebook, replace the old number with a new one?`)) {
+
+        const changedPerson = { ...found, number: personObj.number}
+
+        personService
+          .update(found.id, changedPerson).then(response => {
+            setPersons(persons.map(person => person.id !== found.id ? person : changedPerson))
+          })
+      }
     } else {
+
+      personService
+        .create(personObj)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+        })
+
       setPersons(persons.concat(personObj));
       setNewName('');
       setNewNumber('');
