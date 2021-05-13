@@ -41,6 +41,16 @@ const App = () => {
     setNewNumber(event.target.value);
   }
 
+  const toggleDelete = (person) => {
+    if(window.confirm(`Delete ${person.name}?`)) {
+      const deletedPerson = persons.find(p => p.id === person.id)
+
+      personService.deletePerson(deletedPerson.id)
+      setPersons(persons.filter(p => p.id !== person.id))
+
+    }
+  }
+
   const addPerson = (event) => {
     event.preventDefault();
 
@@ -84,7 +94,7 @@ const App = () => {
       <Header text='Numbers' />
       <div>
       {filterList.map(person =>
-        <Person id={person.id} name={person.name} number={person.number} />
+        <Person key={person.id} name={person.name} number={person.number} toggleDelete={() => toggleDelete(person)}/>
       )}
       </div>
     </div>
