@@ -16,6 +16,7 @@ const App = () => {
   const [ newNumber, setNewNumber] = useState('');
   const [ filter, setNewFilter ] = useState('');
   const [ message, setMessage ] = useState(null);
+  const [ messageType, setMessageType ] = useState('');
 
   useEffect(() => {
     personService
@@ -64,7 +65,7 @@ const App = () => {
     const found = persons.find(person => person.name === newName);
 
     if (found !== undefined) {
-      if(window.confirm(`${newName} is already added too phonebook, replace the old number with a new one?`)) {
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
 
         const changedPerson = { ...found, number: personObj.number}
 
@@ -72,10 +73,21 @@ const App = () => {
           .update(found.id, changedPerson).then(response => {
             setPersons(persons.map(person => person.id !== found.id ? person : changedPerson))
           })
+          .catch(error => {
+            setMessage(`${personObj.name} does not exist in phonebook`
+            )
+            setMessageType('error')
+            setTimeout(() => {
+              setMessage(null);
+              setMessageType('');
+            }, 5000)
+          })
 
         setMessage(`Changed ${personObj.name}'s number`);
+        setMessageType('notification')
         setTimeout(() => {
           setMessage(null);
+          setMessageType('')
         }, 5000);
       }
     } else {
@@ -92,10 +104,12 @@ const App = () => {
       setNewName('');
       setNewNumber('');
       setMessage(`Added ${personObj.name}`);
+      setMessageType('notification')
 
       // setTimeout function calls the setMessage function after 5 seconds, which sets the message to value null
       setTimeout(() =>  {
         setMessage(null);
+        setMessageType('');
       }, 5000);
     }
   }
@@ -103,7 +117,7 @@ const App = () => {
   return (
     <div>
       <Header text='Phonebook' />
-      <Notification message={message} />
+      <Notification message={message} messageType={messageType} />
       <div>filter shown with <input value={filter} onChange={handleFilterChange}/></div>
       
       <Header text='Add a New Contact' />
