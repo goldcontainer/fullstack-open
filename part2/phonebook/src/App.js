@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Person from './components/Person'
+import Notification from './components/Notification'
 
 import personService from './services/persons'
 
@@ -14,6 +15,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber] = useState('');
   const [ filter, setNewFilter ] = useState('');
+  const [ message, setMessage ] = useState(null);
 
   useEffect(() => {
     personService
@@ -70,6 +72,11 @@ const App = () => {
           .update(found.id, changedPerson).then(response => {
             setPersons(persons.map(person => person.id !== found.id ? person : changedPerson))
           })
+
+        setMessage(`Changed ${personObj.name}'s number`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       }
     } else {
 
@@ -84,12 +91,19 @@ const App = () => {
       setPersons(persons.concat(personObj));
       setNewName('');
       setNewNumber('');
+      setMessage(`Added ${personObj.name}`);
+
+      // setTimeout function calls the setMessage function after 5 seconds, which sets the message to value null
+      setTimeout(() =>  {
+        setMessage(null);
+      }, 5000);
     }
   }
 
   return (
     <div>
       <Header text='Phonebook' />
+      <Notification message={message} />
       <div>filter shown with <input value={filter} onChange={handleFilterChange}/></div>
       
       <Header text='Add a New Contact' />
