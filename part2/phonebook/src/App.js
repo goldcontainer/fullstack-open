@@ -10,7 +10,7 @@ const App = () => {
   const [persons, setPersons] = useState([]);
 
   // used for storing user-submitted inputs
-  // setting the vallue attr of the input tag without an event handler
+  // setting the value attr of the input tag without an event handler
   // causes the App to control the behavior of the input element
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber] = useState('');
@@ -19,12 +19,12 @@ const App = () => {
   const [ messageType, setMessageType ] = useState('');
 
   useEffect(() => {
-    personService
-      .getAll()
-      .then(response => {
-        setPersons(response.data)
-      })
+    personService.getAll().then(response => {
+      setPersons(response)
+    })
   }, [])
+
+  console.log(persons.length)
 
   // array of filtered people
   const filterList = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
