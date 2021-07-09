@@ -28,7 +28,8 @@ const App = () => {
   const handleFilterChange = (event) => {
     // console.log(event.target.value);
     setNewFilter(event.target.value);
-    const filterList = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
+    const filterList = persons.filter(person => 
+      person.name.toLowerCase().includes(event.target.value.toLowerCase()));
     setFilteredPersons(filterList);
   }
 
@@ -129,7 +130,7 @@ const App = () => {
       <Header text='Numbers' />
 
       <People
-        person={persons}
+        persons={persons}
         filter={filter}
         filteredPersons={filteredPersons}
         toggleDelete={toggleDelete}
