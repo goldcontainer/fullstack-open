@@ -1,11 +1,11 @@
 import React from 'react'
 
 
-const Person = (props) => {
+const Person = ({ key, person, toggleDelete }) => {
 
 	return (
-		<li key={props.id}>
-			{props.name} {props.number} <button onClick={props.toggleDelete}>delete</button>
+		<li key={key}>
+			{key} {person.number} <button onClick={toggleDelete}>delete</button>
 		</li>
 	)
 }

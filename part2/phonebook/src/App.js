@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import Person from './components/Person'
+import People from './components/People'
 import Notification from './components/Notification'
+import Form from './components/Form'
 
 import personService from './services/persons'
 
@@ -8,30 +9,27 @@ const Header = (props) => <h2>{props.text}</h2>
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-
   // used for storing user-submitted inputs
   // setting the value attr of the input tag without an event handler
   // causes the App to control the behavior of the input element
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber] = useState('');
   const [ filter, setNewFilter ] = useState('');
+  const [ filteredPersons, setFilteredPersons ] = useState(null);
   const [ message, setMessage ] = useState(null);
   const [ messageType, setMessageType ] = useState('');
 
   useEffect(() => {
     personService.getAll().then(response => {
-      setPersons(response)
+      setPersons(response);
     })
   }, [])
-
-  console.log(persons.length)
-
-  // array of filtered people
-  const filterList = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
 
   const handleFilterChange = (event) => {
     // console.log(event.target.value);
     setNewFilter(event.target.value);
+    const filterList = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
+    setFilteredPersons(filterList);
   }
 
   const handleNameChange = (event) => {
@@ -121,19 +119,21 @@ const App = () => {
       <div>filter shown with <input value={filter} onChange={handleFilterChange}/></div>
       
       <Header text='Add a New Contact' />
-      <form onSubmit={addPerson}>
-        <div>name: <input value={newName} onChange={handleNameChange} /></div>
-        <div>number: <input value={newNumber} onChange={handleNumberChange} /></div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Form 
+        onSubmit={addPerson}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+      />
       <Header text='Numbers' />
-      <div>
-      {filterList.map(person =>
-        <Person key={person.id} name={person.name} number={person.number} toggleDelete={() => toggleDelete(person)}/>
-      )}
-      </div>
+
+      <People
+        person={persons}
+        filter={filter}
+        filteredPersons={filteredPersons}
+        toggleDelete={toggleDelete}
+      />
     </div>
   )
 }
