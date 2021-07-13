@@ -95,23 +95,30 @@ const App = () => {
         .create(personObj)
         .then(response => {
           setPersons(persons.concat(response.data))
+
+          //setPersons(persons.concat(personObj));
+          setMessage(`Added ${personObj.name}`);
+          setMessageType('notification')
           setNewName('')
           setNewNumber('')
+
+          setTimeout(() =>  {
+            setMessage(null);
+            setMessageType('');
+          }, 5000);
         })
-
-      setPersons(persons.concat(personObj));
-      setNewName('');
-      setNewNumber('');
-      setMessage(`Added ${personObj.name}`);
-      setMessageType('notification')
-
-      // setTimeout function calls the setMessage function after 5 seconds, which sets the message to value null
-      setTimeout(() =>  {
-        setMessage(null);
-        setMessageType('');
-      }, 5000);
+        .catch(error => {
+          setMessage(error.response.data.error)
+          setMessageType('error')
+          setNewName('')
+          setNewNumber('')
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        })
     }
   }
+
 
   return (
     <div>
