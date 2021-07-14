@@ -4,9 +4,23 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 
+const blogSchema = new mongoose.Schema({
+  title: String,
+  author: String,
+  url: String,
+  likes: Number
+})
 
-const mongoUrl = 'mongodb://localhost/bloglist'
+const Blog = mongoose.model('Blog', blogSchema)
+
+const mongoUrl = 'mongodb+srv://fullstack:%23Hotfudge20@cluster0.byyjv.mongodb.net/bloglist-app?retryWrites=true&w=majority'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+	.then(
+		console.log('connected to MongoDB')
+	)
+	.catch((error) => {
+		console.log('error connecting to MongoDB', error.message)
+	})
 
 app.use(cors())
 app.use(express.json())
@@ -23,7 +37,7 @@ app.post('/api/blogs', (request, response) => {
   const blog = new Blog(request.body)
 
   blog
-		.save()
+    .save()
     .then(result => {
       response.status(201).json(result)
     })
