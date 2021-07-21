@@ -1,15 +1,16 @@
-const blogRouter = require('express').Router()
-const Note = require('../models/blogs')
+const blogsRouter = require('express').Router()
+const Blog = require('../models/blog')
 
-blogRouter.get('/api/blogs', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
+blogsRouter.get('/', (request, response) => {
+	console.log("Trying")
+	Blog
+		.find({})
+		.then(blogs => {
+			response.json(blogs)
+		})
 })
 
-blogRouter.post('/api/blogs', (request, response) => {
+blogsRouter.post('/api/blogs', (request, response) => {
   const blog = new Blog(request.body)
 
   blog
@@ -18,3 +19,5 @@ blogRouter.post('/api/blogs', (request, response) => {
       response.status(201).json(result)
     })
 })
+
+module.exports = blogsRouter
