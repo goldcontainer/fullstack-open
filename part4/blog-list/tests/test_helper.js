@@ -1,4 +1,4 @@
-const Blog = require('../models/blogs')
+const Blog = require('../models/blog')
 
 const initialBlogs = [
   {
@@ -15,6 +15,14 @@ const initialBlogs = [
   }
 ]
 
+beforeEach(async () => {
+	await Blog.deleteMany({})
+	let blogObject = new Blog(initialBlogs[0])
+	await blogObject.save()
+	blogObject = new Blog(initialBlogs[1])
+	await blogObject.save()
+})
+
 const nonExistingId = async () => {
 	const blog = new Blog({
 		title: 'willremovethissoon',
@@ -27,7 +35,7 @@ const nonExistingId = async () => {
 	await blog.save()
 	await blog.remove()
 
-	return blog.__id.toString()
+	return blog._id.toString()
 }
 
 const blogsInDb = async () => {
