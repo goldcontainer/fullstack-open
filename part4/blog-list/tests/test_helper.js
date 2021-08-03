@@ -15,14 +15,6 @@ const initialBlogs = [
   }
 ]
 
-beforeEach(async () => {
-	await Blog.deleteMany({})
-	let blogObject = new Blog(initialBlogs[0])
-	await blogObject.save()
-	blogObject = new Blog(initialBlogs[1])
-	await blogObject.save()
-})
-
 const nonExistingId = async () => {
 	const blog = new Blog({
 		title: 'willremovethissoon',
