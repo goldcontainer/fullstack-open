@@ -1,6 +1,16 @@
+const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+
+const getTokenFrom = request => {
+	const authorization = request.get('authorization')
+	if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+		return authorization.substring(7)
+	}
+	
+	return null
+}
 
 blogsRouter.get('/', async (request, response, next) => {
 	
@@ -14,7 +24,7 @@ blogsRouter.post('/', async (request, response, next) => {
 
   const user = await User.findById(body.userId)
 
-  if(body.title === undefined || body.url === undefined) {
+  if (body.title === undefined || body.url === undefined) {
   	return response.status(400).json({ error: 'title or url missing' })
   }
 
